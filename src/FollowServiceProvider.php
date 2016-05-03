@@ -10,16 +10,16 @@ class FollowServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/../config/follow.php' => config_path('follow.php'),
+        ], 'config');
+
         $timestamp = date('Y_m_d_His', time());
 
         $this->publishes([
             __DIR__ . '/../database/migrations/create_followers_table.php' =>
                 database_path('migrations/' . $timestamp . '_create_followers_table.php')
         ], 'migrations');
-
-        $this->publishes([
-            __DIR__ . '/../config/follow.php' => config_path('config.php')
-        ], 'config');
     }
 
     /**
