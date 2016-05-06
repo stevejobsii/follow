@@ -1,36 +1,58 @@
 <?php
 namespace Smartisan\Follow;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 trait FollowTrait
 {
+    /**
+     * Follow a user.
+     *
+     * @param int|array $user
+     */
     public function follow($user)
     {
-        //
+        if (!is_array($user)) {
+            $user = compact('user');
+        }
+
+        $this->followings()->sync($user, false);
     }
 
+    /**
+     * Unfollow a user.
+     *
+     * @param $user
+     */
     public function unfollow($user)
     {
-        //
-    }
+        if (!is_array($user)) {
+            $user = compact('user');
+        }
 
-    public function block($user)
-    {
-        //
+        $this->followings()->detach($user);
     }
-
-    public function unblock($user)
-    {
-        //
-    }
-
+    
+    /**
+     * Check if user is following given user.
+     *
+     * @param $user
+     * @return mixed
+     */
     public function isFollowing($user)
     {
-        //
+        return $this->followings->contains($user);
     }
 
+    /**
+     * Check if user is followed by given user.
+     *
+     * @param $user
+     * @return mixed
+     */
     public function isFollowedBy($user)
     {
-        //
+        return $this->followers->contains($user);
     }
 
     /**
@@ -40,7 +62,7 @@ trait FollowTrait
      */
     public function followers()
     {
-        $model = config('follow.user_model');
+        $model = get_class($this);
 
         return $this->belongsToMany($model, 'followers', 'follow_id', 'user_id');
     }
@@ -52,7 +74,7 @@ trait FollowTrait
      */
     public function followings()
     {
-        $model = config('follow.user_model');
+        $model = get_class($this);
 
         return $this->belongsToMany($model, 'followers', 'user_id', 'follow_id');
     }

@@ -7,7 +7,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^3.0",
-        "orchestra/testbench": "^3.0"
+        "laravel/laravel": "dev-develop"
     },
     "license": "MIT",
     "authors": [
